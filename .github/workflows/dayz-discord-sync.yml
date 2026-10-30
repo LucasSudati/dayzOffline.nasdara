@@ -1,0 +1,51 @@
+name: DayZ Discord Sync
+on:
+  push:
+    branches: [main]
+    paths: [README.md]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Publish new consultations
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          BEFORE_SHA: ${{ github.event.before }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          python3 - <<'PY'
+          import os, subprocess, json, urllib.request
+          from pathlib import Path
+          url = os.environ.get("DISCORD_WEBHOOK_URL")
+          if not url:
+              raise SystemExit("Missing DISCORD_WEBHOOK_URL secret")
+          current = Path("README.md").read_text(encoding="utf-8")
+          def rows(s):
+              return [line.strip() for line in s.splitlines() if line.startswith("|") and line.count("|") >= 6 and not line.startswith("|---") and not line.startswith("| Categoria")]
+          old = ""
+          before = os.environ.get("BEFORE_SHA", "")
+          if os.environ.get("EVENT_NAME") != "workflow_dispatch" and before and set(before) != {"0"}:
+              p = subprocess.run(["git", "show", before + ":README.md"], capture_output=True, text=True)
+              if p.returncode == 0:
+                  old = p.stdout
+          new = [row for row in rows(current) if row not in set(rows(old))]
+          if os.environ.get("EVENT_NAME") == "workflow_dispatch":
+              new = rows(current)
+          for row in new:
+              cols = [c.strip() for c in row.strip("|").split("|")]
+              if len(cols) < 5: continue
+              category, item, question, answer, source = cols[:5]
+              message = f"📦 **DayZ Nasdara — Nova consulta**\\n**Categoria:** {category}\\n**Item:** {item}\\n**Pergunta:** {question}\\n**Resposta:** {answer}\\n**Fonte:** {source}\\nhttps://github.com/LucasSudati/dayzOffline.nasdara/blob/main/README.md"
+              message = message.replace("\\n", "\n")
+              payload = json.dumps({"content": message[:1950], "allowed_mentions": {"parse": []}}).encode()
+              req = urllib.request.Request(url, data=payload, headers={"Content-Type":"application/json", "User-Agent":"DayZ-Discord-Sync"}, method="POST")
+              with urllib.request.urlopen(req, timeout=20) as response:
+                  print("Discord status:", response.status)
+          print("Consultations sent:", len(new))
+          PY
