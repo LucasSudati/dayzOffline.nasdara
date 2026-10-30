@@ -6,7 +6,7 @@ Referência: arquivos de configuração da missão vanilla do mapa Nasdara. Os v
 
 **Versão do DayZ (estável, PC/Steam): 1.30.164200 — atualização de 21/10/2026.**  
 **Versão experimental (PC/Steam): 1.30.164289 — atualização de 29/10/2026.**  
-Fonte: [notas oficiais da versão estável](https://forums.dayz.com/topic/266388-dayz-update-130/) e [notas oficiais da versão experimental](https://dayz.com/article/game-update/1-30-experimental-release/dayz-steam-patch-notes).
+Fonte: [notas oficiais da versão estável](https://forums.dayz.com/index.php) e [notas oficiais da versão experimental](https://dayz.com/article/game-update/1-30-experimental-release/dayz-steam-patch-notes).
 
 | Categoria | Item | Pergunta | Resposta | Fonte |
 |---|---|---|---|---|
