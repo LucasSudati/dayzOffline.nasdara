@@ -69,7 +69,7 @@ Para decodificar, cada **dígito numérico** é representado por **cinco sinais*
 Para identificar os números **sem anotar todos os sinais nem usar aplicativo**, ouvir o **primeiro sinal** e contar a sequência inicial. Cada número tem cinco sinais; os espaços abaixo são apenas visuais.
 
 - **Começou com ponto (`·`):** o dígito é de **1 a 5**. Contar os pontos iniciais: `· · · — —` = **3**; `· · · · ·` = **5**.
-- **Começou com traço (`—`):** o dígito é **6, 7, 8, 9 ou 0**. Contar os traços iniciais e subtrair de 10: `— — · · ·` = **8** (10 − 2); `— — — — ·` = **6** (10 − 4); `— — — — —` = **0**.
+- **Começou com traço (`—`):** o dígito é **6, 7, 8, 9 ou 0**. Contar os traços iniciais: **1 traço = 6; 2 = 7; 3 = 8; 4 = 9; 5 = 0**. Por exemplo: `— — · · ·` = **7**; `— — — — ·` = **9**; `— — — — —` = **0**.
 - **Reconhecimento antecipado:** quando o sinal muda de ponto para traço (ou vice-versa), o dígito já pode ser reconhecido. Se os cinco sinais forem iguais, **cinco pontos = 5** e **cinco traços = 0**. Mesmo reconhecendo cedo, aguardar o fim do grupo antes de começar o próximo número.
 - **Na transmissão do bunker:** separar os dígitos pela pausa entre grupos e manter a ordem. Conferir a mensagem repetida, especialmente quando houver ruído ou dúvida entre ponto e traço.
 
@@ -77,16 +77,16 @@ Para identificar os números **sem anotar todos os sinais nem usar aplicativo**,
 
 | Treino | Sinais ouvidos (cada `/` separa um dígito) | Objetivo |
 |---|---|---|
-| 1 | `· · — — — / — — · · ·` | Identificar dois dígitos |
+| 1 | `· · — — — / — — — · ·` | Identificar dois dígitos |
 | 2 | `— — — — — / · · · · ·` | Reconhecer os casos especiais |
-| 3 | `— · · · · / · · · — — / — — — · · / · — — — —` | Reconhecer quatro dígitos seguidos |
+| 3 | `— — — — · / · · · — — / — — · · · / · — — — —` | Reconhecer quatro dígitos seguidos |
 
 <details>
 <summary>Ver respostas dos exercícios</summary>
 
-1. **28** — dois pontos = 2; dois traços = 8.
+1. **28** — dois pontos = 2; três traços = 8.
 2. **05** — cinco traços = 0; cinco pontos = 5.
-3. **9371** — um traço = 9; três pontos = 3; três traços = 7; um ponto = 1.
+3. **9371** — quatro traços = 9; três pontos = 3; dois traços = 7; um ponto = 1.
 
 </details>
 
