@@ -4,6 +4,10 @@ Referência: arquivos de configuração da missão vanilla do mapa Nasdara. Os v
 
 ## Perguntas e respostas
 
+**Versão do DayZ (estável, PC/Steam): 1.30.164200 — atualização de 21/10/2026.**  
+**Versão experimental (PC/Steam): 1.30.164289 — atualização de 29/10/2026.**  
+Fonte: [notas oficiais da versão estável](https://forums.dayz.com/topic/266388-dayz-update-130/) e [notas oficiais da versão experimental](https://dayz.com/article/game-update/1-30-experimental-release/dayz-steam-patch-notes).
+
 | Categoria | Item | Pergunta | Resposta | Fonte |
 |---|---|---|---|---|
 | Armazenamento / persistência | Gun Case (preta, laranja e branca) | Quanto tempo permanece no chão, aberta ou trancada? | O `lifetime` configurado é **14.400 segundos (4 horas)** para `GunCase_Black`, `GunCase_Orange` e `GunCase_White`. O XML não distingue estado aberto/trancado, nem comprova exceção por enterramento; é preciso verificar o comportamento do item no código do jogo. Não considerar permanente como caixa de madeira. | [db/types.xml](db/types.xml) |
