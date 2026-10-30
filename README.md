@@ -45,7 +45,24 @@ A janela 17:45–06:00 tem **12 h 15 min do jogo (735 minutos)**, ligeiramente m
 
 Guias recentes de jogadores relatam a frequência **80,0 MHz** (rádio pessoal ou rádio de base) e mensagens contendo **seis dígitos de referência de mapa seguidos de quatro dígitos de senha**. A frequência e o formato detalhado não aparecem no JSON e devem ser tratados como informações comunitárias, não como parâmetros comprovados por esse arquivo. Referências: [Skynet — Nasdara bunker finder](https://www.killfeed.com/nasdara/bunkers) e [guia de bunkers](https://dayzwiki101.com/nasdara-bunkers).
 
-Para decodificar os números, usar Morse numérico: `0 -----`, `1 .----`, `2 ..---`, `3 ...--`, `4 ....-`, `5 .....`, `6 -....`, `7 --...`, `8 ---..`, `9 ----.`. Registrar separadamente a referência do mapa e a senha; zeros à esquerda são significativos. Ferramentas comunitárias podem ajudar, mas a leitura deve ser conferida por repetição do sinal.
+Para decodificar, cada **dígito numérico** é representado por **cinco sinais**. Na tabela, `·` é um sinal curto (**ponto**) e `—` é um sinal longo (**traço**). Os espaços entre grupos de cinco sinais foram acrescentados apenas para facilitar a leitura.
+
+| Dígito | Código Morse | Leitura dos sinais |
+|:---:|:---:|---|
+| **0** | `—————` | 5 traços |
+| **1** | `·————` | 1 ponto + 4 traços |
+| **2** | `··———` | 2 pontos + 3 traços |
+| **3** | `···——` | 3 pontos + 2 traços |
+| **4** | `····—` | 4 pontos + 1 traço |
+| **5** | `·····` | 5 pontos |
+| **6** | `—····` | 1 traço + 4 pontos |
+| **7** | `——···` | 2 traços + 3 pontos |
+| **8** | `———··` | 3 traços + 2 pontos |
+| **9** | `————·` | 4 traços + 1 ponto |
+
+**Exemplo ilustrativo (não é uma senha real):** código `2047` → `··——— ————— ····— ——···`. Para interpretar uma transmissão, identificar primeiro os grupos de cinco sinais, converter cada grupo em um dígito e preservar a ordem recebida.
+
+**Atenção:** segundo os relatos comunitários citados acima, a mensagem contém uma referência de mapa de **seis dígitos** e uma senha de **quatro dígitos**. Registrar essas partes separadamente, sem descartar zeros à esquerda. Os espaços mostrados na tabela e no exemplo são uma convenção visual; não substituem a identificação das pausas reais do áudio.
 
 ### Relação com o ciclo dia/noite — hipótese observacional
 
