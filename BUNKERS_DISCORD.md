@@ -1,4 +1,4 @@
-# Guia de bunkers e transmissões — versão para Discord
+# Guias de bunkers e transmissões
 
 ## Bunkers — transmissões, senhas e rotação (pesquisa em 30/10/2026)
 
