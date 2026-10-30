@@ -79,6 +79,9 @@ Foi estimado em jogo um ciclo de **3 h de dia e 40 min de noite (220 minutos rea
 
 **Fontes:** [configuração vanilla](https://github.com/LucasSudati/dayzOffline.nasdara/blob/main/cfgspawnabletypes.xml) e [relato comunitário sobre recompensas](https://dayzwiki101.com/nasdara-bunkers). O conjunto exato, as probabilidades e o script que preenche a caixa ainda precisam ser verificados.
 
+
+**Verificação adicional (30/10/2026):** a busca no repositório público `BohemiaInteractive/DayZ-Central-Economy` por `BunkerReward`, `BunkerLoot` e `BunkerSupply` não retornou uma definição de tabela de recompensas. Nos XMLs examinados (`types.xml`, `mapgroupproto.xml` e `mapgrouppos.xml`), há registros de estojos/chaves e de construções de bunker, mas não uma lista explícita do conteúdo da caixa do evento. Os arquivos de posições e protótipos descrevem construções e pontos de loot, não comprovam os prêmios especiais. A identificação do script de geração da recompensa continua pendente.
+
 ### O que ainda não está confirmado
 
 - Algoritmo exato de sorteio, repetição ou exclusão de bunkers entre lotes.
