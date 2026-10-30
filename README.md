@@ -49,20 +49,48 @@ Para decodificar, cada **dígito numérico** é representado por **cinco sinais*
 
 | Dígito | Código Morse | Leitura dos sinais |
 |:---:|:---:|---|
-| **0** | `—————` | 5 traços |
-| **1** | `·————` | 1 ponto + 4 traços |
-| **2** | `··———` | 2 pontos + 3 traços |
-| **3** | `···——` | 3 pontos + 2 traços |
-| **4** | `····—` | 4 pontos + 1 traço |
-| **5** | `·····` | 5 pontos |
-| **6** | `—····` | 1 traço + 4 pontos |
-| **7** | `——···` | 2 traços + 3 pontos |
-| **8** | `———··` | 3 traços + 2 pontos |
-| **9** | `————·` | 4 traços + 1 ponto |
+| **0** | `— — — — —` | 5 traços |
+| **1** | `· — — — —` | 1 ponto + 4 traços |
+| **2** | `· · — — —` | 2 pontos + 3 traços |
+| **3** | `· · · — —` | 3 pontos + 2 traços |
+| **4** | `· · · · —` | 4 pontos + 1 traço |
+| **5** | `· · · · ·` | 5 pontos |
+| **6** | `— · · · ·` | 1 traço + 4 pontos |
+| **7** | `— — · · ·` | 2 traços + 3 pontos |
+| **8** | `— — — · ·` | 3 traços + 2 pontos |
+| **9** | `— — — — ·` | 4 traços + 1 ponto |
 
-**Exemplo ilustrativo (não é uma senha real):** código `2047` → `··——— ————— ····— ——···`. Para interpretar uma transmissão, identificar primeiro os grupos de cinco sinais, converter cada grupo em um dígito e preservar a ordem recebida.
+**Exemplo ilustrativo (não é uma senha real):** código `2047` → `· · — — — / — — — — — / · · · · — / — — · · ·`. Para interpretar uma transmissão, identificar primeiro os grupos de cinco sinais, converter cada grupo em um dígito e preservar a ordem recebida.
 
 **Atenção:** segundo os relatos comunitários citados acima, a mensagem contém uma referência de mapa de **seis dígitos** e uma senha de **quatro dígitos**. Registrar essas partes separadamente, sem descartar zeros à esquerda. Os espaços mostrados na tabela e no exemplo são uma convenção visual; não substituem a identificação das pausas reais do áudio.
+
+### Decodificação rápida pelo ouvido — macete para jogar em grupo
+
+Para identificar os números **sem anotar todos os sinais nem usar aplicativo**, ouvir o **primeiro sinal** e contar a sequência inicial. Cada número tem cinco sinais; os espaços abaixo são apenas visuais.
+
+- **Começou com ponto (`·`):** o dígito é de **1 a 5**. Contar os pontos iniciais: `· · · — —` = **3**; `· · · · ·` = **5**.
+- **Começou com traço (`—`):** o dígito é **6, 7, 8, 9 ou 0**. Contar os traços iniciais e subtrair de 10: `— — · · ·` = **8** (10 − 2); `— — — — ·` = **6** (10 − 4); `— — — — —` = **0**.
+- **Reconhecimento antecipado:** quando o sinal muda de ponto para traço (ou vice-versa), o dígito já pode ser reconhecido. Se os cinco sinais forem iguais, **cinco pontos = 5** e **cinco traços = 0**. Mesmo reconhecendo cedo, aguardar o fim do grupo antes de começar o próximo número.
+- **Na transmissão do bunker:** separar os dígitos pela pausa entre grupos e manter a ordem. Conferir a mensagem repetida, especialmente quando houver ruído ou dúvida entre ponto e traço.
+
+**Exercícios para treinar em dupla (respostas abaixo):**
+
+| Treino | Sinais ouvidos (cada `/` separa um dígito) | Objetivo |
+|---|---|---|
+| 1 | `· · — — — / — — · · ·` | Identificar dois dígitos |
+| 2 | `— — — — — / · · · · ·` | Reconhecer os casos especiais |
+| 3 | `— · · · · / · · · — — / — — — · · / · — — — —` | Reconhecer quatro dígitos seguidos |
+
+<details>
+<summary>Ver respostas dos exercícios</summary>
+
+1. **28** — dois pontos = 2; dois traços = 8.
+2. **05** — cinco traços = 0; cinco pontos = 5.
+3. **9371** — um traço = 9; três pontos = 3; três traços = 7; um ponto = 1.
+
+</details>
+
+> O macete serve para **Morse numérico**. Ponto e traço não são bits de duração igual: além da ordem dos sinais, as pausas ajudam a distinguir os dígitos.
 
 ### Relação com o ciclo dia/noite — hipótese observacional
 
