@@ -47,17 +47,17 @@ Para decodificar, cada **dígito numérico** é representado por **cinco sinais*
 Para identificar os números **sem anotar todos os sinais nem usar aplicativo**, ouvir o **primeiro sinal** e contar a sequência inicial. Cada número tem cinco sinais; os espaços abaixo são apenas visuais.
 
 - **Começou com ponto (`·`):** o dígito é de **1 a 5**. Contar os pontos iniciais: `· · · — —` = **3**; `· · · · ·` = **5**.
-- **Começou com traço (`—`):** o dígito é **6, 7, 8, 9 ou 0**. Contar os traços iniciais e subtrair de 10: `— — · · ·` = **8** (10 − 2); `— — — — ·` = **6** (10 − 4); `— — — — —` = **0**.
+- **Começou com traço (`—`):** o dígito é **6, 7, 8, 9 ou 0**. Contar os traços iniciais: **1 traço = 6; 2 traços = 7; 3 traços = 8; 4 traços = 9; 5 traços = 0**. Exemplos: `— — · · ·` = **7**; `— — — — ·` = **9**; `— — — — —` = **0**.
 - **Reconhecimento antecipado:** quando o sinal muda de ponto para traço (ou vice-versa), o dígito já pode ser reconhecido. Se os cinco sinais forem iguais, **cinco pontos = 5** e **cinco traços = 0**. Mesmo reconhecendo cedo, aguardar o fim do grupo antes de começar o próximo número.
 - **Na transmissão do bunker:** separar os dígitos pela pausa entre grupos e manter a ordem. Conferir a mensagem repetida, especialmente quando houver ruído ou dúvida entre ponto e traço.
 
 **Exercícios para treinar em dupla (respostas abaixo):**
 
-**Treino 1:** `· · — — — / — — · · ·` — resposta: ||28||
+**Treino 1:** `· · — — — / — — · · ·` — resposta: ||27||
 
 **Treino 2:** `— — — — — / · · · · ·` — resposta: ||05||
 
-**Treino 3:** `— · · · · / · · · — — / — — — · · / · — — — —` — resposta: ||9371||
+**Treino 3:** `— · · · · / · · · — — / — — — · · / · — — — —` — resposta: ||6381||
 
 > O macete serve para **Morse numérico**. Ponto e traço não são bits de duração igual: além da ordem dos sinais, as pausas ajudam a distinguir os dígitos.
 
