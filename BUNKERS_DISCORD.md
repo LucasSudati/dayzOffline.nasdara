@@ -91,3 +91,66 @@ Foi estimado em jogo um ciclo de **3 h de dia e 40 min de noite (220 minutos rea
 - Relatos sobre conteúdo de caixas, duração de abertura e frequência do rádio ainda precisam de verificação independente nos scripts ou em testes reproduzíveis.
 
 **Critério da pesquisa:** distinguir parâmetros oficiais, implementação consultável em scripts e relatos comunitários. Não publicar senhas atuais ou horários reais de rotação como se fossem determinísticos sem observação do servidor.
+
+---
+
+## Versão para Discord — seis mensagens independentes
+
+Copiar apenas o texto de cada bloco, sem o título de separação. Cada mensagem tem menos de 2.000 caracteres. A versão técnica completa permanece acima.
+
+### Mensagem 1
+
+**DAYZ NASDARA | 1/6 — BUNKERS**
+Configuração vanilla: 3 bunkers ativos por lote, senha de 4 dígitos, 23 posições de referência configuradas. Um lote dura 720 minutos do jogo (12 horas do jogo), e o relatório ocorre a cada 10 minutos do jogo. A transmissão funciona entre 17:45 e 06:00, no relógio do DayZ, não no horário de Brasília.
+A janela dura 735 minutos do jogo, 15 a mais que o lote. Portanto, não há garantia de exatamente uma troca por noite nem de três bunkers diferentes a cada noite.
+Fonte: cfgbunkerbroadcast.json (vanilla).
+
+### Mensagem 2
+
+**DAYZ NASDARA | 2/6 — RÁDIO**
+Sinais Morse: ponto (·) = 0,5 s; traço (—) = 1,5 s; intervalo entre sinais = 0,4 s; intervalo maior = 2,2 s; pausa entre bunkers = 6 s.
+A frequência 80,0 MHz e o formato de 6 dígitos de localização + 4 de senha são relatos da comunidade, não valores comprovados no JSON consultado.
+Anota a sequência completa, incluindo zeros iniciais, e separa os blocos conforme as pausas.
+Fonte: cfgbunkerbroadcast.json; relatos comunitários identificados no guia completo.
+
+### Mensagem 3
+
+**DAYZ NASDARA | 3/6 — MORSE NUMÉRICO**
+0: — — — — —
+1: · — — — —
+2: · · — — —
+3: · · · — —
+4: · · · · —
+5: · · · · ·
+6: — · · · ·
+7: — — · · ·
+8: — — — · ·
+9: — — — — ·
+Cada número usa 5 sinais. Exemplo ilustrativo: 2047 = · · — — — / — — — — — / · · · · — / — — · · ·.
+Os espaços e barras acima são apenas para facilitar a leitura.
+
+### Mensagem 4
+
+**DAYZ NASDARA | 4/6 — MACETE PARA DECODIFICAR**
+Se o número começa com ponto (·), conta os pontos iniciais: 1 a 5 pontos correspondem aos números 1 a 5.
+Se começa com traço (—), conta os traços iniciais: 1 traço = 6; 2 = 7; 3 = 8; 4 = 9; 5 = 0.
+Exemplos: · · · — — = 3; — — — · · = 8; — — — — — = 0.
+O número pode ser reconhecido quando o sinal muda, mas espera os cinco sinais terminarem para identificar o próximo.
+
+### Mensagem 5
+
+**DAYZ NASDARA | 5/6 — TREINO MORSE**
+Tenta decodificar antes de abrir a resposta.
+Treino 1: · · — — — / — — · · · → ||27||
+Treino 2: — — — — — / · · · · · → ||05||
+Treino 3: — · · · · / · · · — — / — — — · · / · — — — — → ||6381||
+No Discord, os símbolos || ocultam a resposta até alguém clicar. A transmissão real exige ouvir também as pausas entre grupos.
+
+### Mensagem 6
+
+**DAYZ NASDARA | 6/6 — GUN CASE E RECOMPENSAS**
+Nos arquivos vanilla, existem GunCase_Black, GunCase_White e GunCase_Orange. As chaves associadas são, respectivamente, azul, vermelha e laranja. O cfgspawnabletypes.xml atribui chance 1.0 (100%) à chave correspondente como carga da caixa; isso NÃO significa 100% de chance de ganhar a caixa no evento.
+O types.xml registra nominal = 0 para as três GunCase: não há geração normal alvo pela economia central. Isso não impede que um evento ou script as crie.
+Relatos ainda NÃO confirmados do evento: estojo preto com SCAR-H; estojo branco com SV98; miras MK4, carregadores, munições, baterias, colete, NVG e capacete.
+SCAR-H tem nominal 2 e uso ContaminatedArea/Unique no types.xml; SV98 tem nominal 0 e categoria lootdispatch. Esses valores NÃO são probabilidades de recompensa.
+**Chance de receber SCAR-H ou SV98 no evento: desconhecida.** Para calcular porcentagens, precisamos da tabela de pesos ou do script que escolhe as recompensas. types.xml, mapgroupproto.xml e mapgrouppos.xml não fornecem essa tabela.
