@@ -19,7 +19,7 @@ jobs:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
           python3 - <<'PY'
-          import json, os, urllib.request, urllib.error
+          import base64, json, os, urllib.request, urllib.error
           from pathlib import Path
           url = os.environ.get("DISCORD_WEBHOOK_URL", "").rstrip("/")
           if not url:
@@ -65,11 +65,12 @@ jobs:
           try:
               with request(state_api, headers=headers) as response:
                   state = json.load(response)
-                  import base64
                   message_id = base64.b64decode(state["content"]).decode().strip()
                   state_sha = state["sha"]
           except urllib.error.HTTPError as e:
-              if e.code != 404: raise
+              if e.code != 404:
+                  print(f'GitHub state read failed: HTTP {e.code}: {e.read().decode(errors="replace")[:500]}')
+                  raise
           payload = {"content": "📚 **Consultas DayZ Nasdara — tabela atualizada**", "embeds": embeds[:10], "allowed_mentions": {"parse": []}}
           if message_id:
               try:
@@ -77,7 +78,9 @@ jobs:
                       print("Updated Discord table:", message_id)
                       raise SystemExit(0)
               except urllib.error.HTTPError as e:
-                  if e.code != 404: raise
+                  if e.code != 404:
+                      print(f'Discord message update failed: HTTP {e.code}: {e.read().decode(errors="replace")[:500]}')
+                      raise
           with request(url + "?wait=true", "POST", payload) as response:
               message_id = str(json.load(response)["id"])
           state_body = {"message": "Save Discord table message ID", "content": base64.b64encode(message_id.encode()).decode()}
