@@ -6,46 +6,87 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+  actions: write
 jobs:
-  notify:
+  sync:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
-      - name: Publish new consultations
+      - name: Sync README table to one Discord message
         env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_API_URL: ${{ github.api_url }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          BEFORE_SHA: ${{ github.event.before }}
-          EVENT_NAME: ${{ github.event_name }}
         run: |
           python3 - <<'PY'
-          import os, subprocess, json, urllib.request
+          import json, os, urllib.request, urllib.error
           from pathlib import Path
-          url = os.environ.get("DISCORD_WEBHOOK_URL")
+          url = os.environ.get("DISCORD_WEBHOOK_URL", "").rstrip("/")
           if not url:
-              raise SystemExit("Missing DISCORD_WEBHOOK_URL secret")
-          current = Path("README.md").read_text(encoding="utf-8")
-          def rows(s):
-              return [line.strip() for line in s.splitlines() if line.startswith("|") and line.count("|") >= 6 and not line.startswith("|---") and not line.startswith("| Categoria")]
-          old = ""
-          before = os.environ.get("BEFORE_SHA", "")
-          if os.environ.get("EVENT_NAME") != "workflow_dispatch" and before and set(before) != {"0"}:
-              p = subprocess.run(["git", "show", before + ":README.md"], capture_output=True, text=True)
-              if p.returncode == 0:
-                  old = p.stdout
-          new = [row for row in rows(current) if row not in set(rows(old))]
-          if os.environ.get("EVENT_NAME") == "workflow_dispatch":
-              new = rows(current)
-          for row in new:
-              cols = [c.strip() for c in row.strip("|").split("|")]
-              if len(cols) < 5: continue
-              category, item, question, answer, source = cols[:5]
-              message = f"📦 **DayZ Nasdara — Nova consulta**\\n**Categoria:** {category}\\n**Item:** {item}\\n**Pergunta:** {question}\\n**Resposta:** {answer}\\n**Fonte:** {source}\\nhttps://github.com/LucasSudati/dayzOffline.nasdara/blob/main/README.md"
-              message = message.replace("\\n", "\n")
-              payload = json.dumps({"content": message[:1950], "allowed_mentions": {"parse": []}}).encode()
-              req = urllib.request.Request(url, data=payload, headers={"Content-Type":"application/json", "User-Agent":"DayZ-Discord-Sync"}, method="POST")
-              with urllib.request.urlopen(req, timeout=20) as response:
-                  print("Discord status:", response.status)
-          print("Consultations sent:", len(new))
+              raise SystemExit("Missing DISCORD_WEBHOOK_URL")
+          lines = Path("README.md").read_text(encoding="utf-8").splitlines()
+          rows = []
+          for line in lines:
+              if not line.startswith("|") or line.startswith("|---") or line.startswith("| Categoria"):
+                  continue
+              cells = [x.strip() for x in line.strip("|").split("|")]
+              if len(cells) >= 5:
+                  rows.append(cells[:5])
+          # Discord does not render Markdown tables; use aligned code blocks.
+          def short(s, n):
+              return s.replace("**", "").replace("`", "'").replace("\n", " ")[:n]
+          pages = []
+          header = "ITEM                         | RESUMO\n" + "-" * 65 + "\n"
+          page = header
+          for category, item, question, answer, source in rows:
+              summary = short(answer, 100)
+              entry = f"{short(item, 28):28} | {summary}\n"
+              if len(page) + len(entry) > 1600:
+                  pages.append(page)
+                  page = header
+              page += entry
+          pages.append(page)
+          embeds = [{"title": "DayZ Nasdara | Tabela de consultas" + (f" ({i+1}/{len(pages)})" if len(pages)>1 else ""),
+                     "description": "```text\n" + p + "```",
+                     "url": "https://github.com/LucasSudati/dayzOffline.nasdara/blob/main/README.md"}
+                    for i, p in enumerate(pages)]
+          # Webhook message id is kept in an existing pinned Discord message,
+          # discovered by querying recent webhook-authored messages is not supported.
+          # Store the id in a GitHub Actions variable for subsequent edits.
+          api = os.environ.get("GITHUB_API_URL")
+          # Use a fixed thread: first creation stores message id in repository variable via GitHub API.
+          token = os.environ.get("GH_TOKEN")
+          repo = os.environ.get("GITHUB_REPOSITORY")
+          var_api = f"{api}/repos/{repo}/actions/variables/DISCORD_TABLE_MESSAGE_ID"
+          headers = {"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json"}
+          def request(endpoint, method="GET", body=None, headers=None):
+              data = None if body is None else json.dumps(body).encode()
+              h = dict(headers or {})
+              if data is not None: h["Content-Type"] = "application/json"
+              return urllib.request.urlopen(urllib.request.Request(endpoint, data=data, headers=h, method=method), timeout=20)
+          message_id = None
+          try:
+              with request(var_api, headers=headers) as response:
+                  message_id = json.load(response).get("value")
+          except urllib.error.HTTPError as e:
+              if e.code != 404: raise
+          payload = {"content": "📚 **Consultas DayZ Nasdara — tabela atualizada**", "embeds": embeds[:10], "allowed_mentions": {"parse": []}}
+          if message_id:
+              try:
+                  with request(url + "/messages/" + message_id, "PATCH", payload):
+                      print("Updated Discord table:", message_id)
+                      raise SystemExit(0)
+              except urllib.error.HTTPError as e:
+                  if e.code != 404: raise
+          with request(url + "?wait=true", "POST", payload) as response:
+              message_id = str(json.load(response)["id"])
+          try:
+              with request(var_api, "PATCH", {"name": "DISCORD_TABLE_MESSAGE_ID", "value": message_id}, headers):
+                  pass
+          except urllib.error.HTTPError as e:
+              if e.code != 404: raise
+              with request(f"{api}/repos/{repo}/actions/variables", "POST", {"name": "DISCORD_TABLE_MESSAGE_ID", "value": message_id}, headers):
+                  pass
+          print("Created Discord table:", message_id)
           PY
