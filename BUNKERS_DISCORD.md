@@ -65,11 +65,19 @@ Para identificar os números **sem anotar todos os sinais nem usar aplicativo**,
 
 Foi estimado em jogo um ciclo de **3 h de dia e 40 min de noite (220 minutos reais)**. Essa duração **não foi verificada nos arquivos da missão nem no servidor oficial**. Se a janela 17:45–06:00 corresponder aproximadamente aos 40 minutos reais observados, isso seria uma relação aproximada, não uma conversão universal: os multiplicadores de tempo diurno e noturno podem ser diferentes.
 
-### Loot das caixas do evento de bunker — levantamento pendente
+### Loot das caixas do evento de bunker
 
-Esta seção se refere **exclusivamente às caixas geradas pelo evento de bunker**, não ao loot militar comum encontrado no interior do bunker.
+**Esta lista se refere à caixa de recompensa do evento, não ao loot comum das salas do bunker.**
 
-Os arquivos `types.xml`, `mapgroupproto.xml` e `mapgrouppos.xml` não bastam, isoladamente, para demonstrar a lista exata de itens possíveis dentro da caixa do evento. É necessário localizar a configuração ou o script que popula esse contêiner (ou registrar resultados de testes reproduzíveis). Por isso, **nenhuma lista de itens está sendo apresentada como confirmada** neste momento.
+**Itens relatados pela comunidade (ainda não confirmados integralmente por scripts):**
+- Uma das opções de estojo de arma: **GunCase_Black** (relatado com SCAR-H) ou **GunCase_White** (relatado com SV98).
+- Para a opção SCAR-H, há relatos de coronha, mira MK4 bege, dois carregadores de 20 tiros, munição .308 e bateria de 9 V.
+- Para a opção SV98, há relatos de mira MK4 verde, dois carregadores de 10 tiros, munição traçante 7,62×54R e bateria de 9 V.
+- Também são relatados colete porta-placas com bolsos e coldre, óculos de visão noturna com suporte, capacete balístico desértico e baterias de 9 V.
+
+**Confirmado no arquivo vanilla `cfgspawnabletypes.xml`:** os estojos têm chaves associadas como carga com chance `1.0`: `GunCase_Black` → `GunCaseKeys_Blue`; `GunCase_White` → `GunCaseKeys_Red`; `GunCase_Orange` → `GunCaseKeys_Orange`. **Isso não demonstra que os três estojos apareçam na caixa do evento**; comprova apenas as associações no arquivo.
+
+**Fontes:** [configuração vanilla](https://github.com/LucasSudati/dayzOffline.nasdara/blob/main/cfgspawnabletypes.xml) e [relato comunitário sobre recompensas](https://dayzwiki101.com/nasdara-bunkers). O conjunto exato, as probabilidades e o script que preenche a caixa ainda precisam ser verificados.
 
 ### O que ainda não está confirmado
 
