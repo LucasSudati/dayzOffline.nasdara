@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
-  actions: write
+  contents: write
 jobs:
   sync:
     runs-on: ubuntu-latest
@@ -51,24 +51,24 @@ jobs:
                      "description": "```text\n" + p + "```",
                      "url": "https://github.com/LucasSudati/dayzOffline.nasdara/blob/main/README.md"}
                     for i, p in enumerate(pages)]
-          # Webhook message id is kept in an existing pinned Discord message,
-          # discovered by querying recent webhook-authored messages is not supported.
-          # Store the id in a GitHub Actions variable for subsequent edits.
-          api = os.environ.get("GITHUB_API_URL")
-          # Use a fixed thread: first creation stores message id in repository variable via GitHub API.
-          token = os.environ.get("GH_TOKEN")
-          repo = os.environ.get("GITHUB_REPOSITORY")
-          var_api = f"{api}/repos/{repo}/actions/variables/DISCORD_TABLE_MESSAGE_ID"
+          # Keep the message ID in a repository file; GITHUB_TOKEN can write contents.
+          api = os.environ["GITHUB_API_URL"]
+          repo = os.environ["GITHUB_REPOSITORY"]
+          token = os.environ["GH_TOKEN"]
+          state_api = f"{api}/repos/{repo}/contents/.github/discord-table-message-id.txt"
           headers = {"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json"}
           def request(endpoint, method="GET", body=None, headers=None):
               data = None if body is None else json.dumps(body).encode()
               h = dict(headers or {})
               if data is not None: h["Content-Type"] = "application/json"
               return urllib.request.urlopen(urllib.request.Request(endpoint, data=data, headers=h, method=method), timeout=20)
-          message_id = None
+          message_id, state_sha = None, None
           try:
-              with request(var_api, headers=headers) as response:
-                  message_id = json.load(response).get("value")
+              with request(state_api, headers=headers) as response:
+                  state = json.load(response)
+                  import base64
+                  message_id = base64.b64decode(state["content"]).decode().strip()
+                  state_sha = state["sha"]
           except urllib.error.HTTPError as e:
               if e.code != 404: raise
           payload = {"content": "📚 **Consultas DayZ Nasdara — tabela atualizada**", "embeds": embeds[:10], "allowed_mentions": {"parse": []}}
@@ -81,12 +81,9 @@ jobs:
                   if e.code != 404: raise
           with request(url + "?wait=true", "POST", payload) as response:
               message_id = str(json.load(response)["id"])
-          try:
-              with request(var_api, "PATCH", {"name": "DISCORD_TABLE_MESSAGE_ID", "value": message_id}, headers):
-                  pass
-          except urllib.error.HTTPError as e:
-              if e.code != 404: raise
-              with request(f"{api}/repos/{repo}/actions/variables", "POST", {"name": "DISCORD_TABLE_MESSAGE_ID", "value": message_id}, headers):
-                  pass
+          state_body = {"message": "Save Discord table message ID", "content": base64.b64encode(message_id.encode()).decode()}
+          if state_sha: state_body["sha"] = state_sha
+          with request(state_api, "PUT", state_body, headers):
+              pass
           print("Created Discord table:", message_id)
           PY
